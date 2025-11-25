@@ -27,14 +27,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API funcionando' });
 });
 
-app.get('/', (req, res) => {
-  res.json({
-    status: 'ok',
-    message: 'Backend Agenda desplegado en Vercel',
-    docs: '/api/health'
-  });
-});
-
 // Ruta para probar la conexión con la base de datos
 app.get('/api/db-check', async (req, res) => {
   try {

@@ -1,0 +1,468 @@
+{
+	"info": {
+		"_postman_id": "9126f087-0ce3-4ee3-aed9-046a7796ee6e",
+		"name": "Agenda de tareas API",
+		"description": "API REST para gestionar usuarios, tareas y categorías.\n\n## Base URL\n\n- `{{base_url}}` (por defecto: `http://localhost:3000`)\n    \n\n## Autenticación\n\n- `POST /api/auth/login`\n    \n- Devuelve un `token` JWT.\n    \n- El token se guarda automáticamente en la variable de entorno `token` y se usa en los endpoints protegidos como:\n    \n\n`Authorization: Bearer {{token}}`\n\n## Entidades principales\n\n- **Users**: información del usuario autenticado.\n    \n- **Tasks**: tareas del usuario.\n    \n- **Categories**: categorías para agrupar tareas.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24383385",
+		"_collection_link": "https://cloudy-satellite-119864.postman.co/workspace/ba63cde2-1613-4535-9dc9-419201323f73/collection/24383385-9126f087-0ce3-4ee3-aed9-046a7796ee6e?action=share&source=collection_link&creator=24383385"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let data = pm.response.json();\r",
+									"if (data.token) {\r",
+									"    pm.environment.set(\"token\", data.token);\r",
+									"    console.log(\"Token guardado en el environment\");\r",
+									"} else {\r",
+									"    console.log(\"No se encontró 'token' en la respuesta\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"sofiverify@example.com\",\r\n  \"password\": \"secreta123\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints de autenticación.\n\n- `POST /api/auth/login`  \n    Recibe email y password.  \n    Devuelve un token JWT y los datos básicos del usuario.  \n    El token se guarda automáticamente en la variable de entorno `token` para usar en las demás requests."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "obtener user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "---"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados al usuario autenticado.\n\n- `GET /api/users/me`  \n    Devuelve los datos del usuario logueado (id, nombre, email).  \n    Requiere enviar `Authorization: Bearer {{token}}`."
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "crear tarea",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Comprar frutas\",\r\n  \"description\": \"Pasar por la verdulería\",\r\n  \"due_date\": \"2025-11-30\",\r\n  \"status\": \"pendiente\",\r\n  \"priority\": \"media\",\r\n  \"category_id\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener tarea por ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Comprar frutas\",\r\n  \"description\": \"Pasar por la verdulería\",\r\n  \"due_date\": \"2025-11-30\",\r\n  \"status\": \"pendiente\",\r\n  \"priority\": \"media\",\r\n  \"category_id\": 1\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener listado de tareas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar una tarea",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Comprar frutas y verduras\",\r\n  \"description\": \"Agregar tomates y bananas\",\r\n  \"due_date\": \"2025-12-01\",\r\n  \"status\": \"en_progreso\",\r\n  \"priority\": \"alta\",\r\n  \"category_id\": 1\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/tasks/3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar tarea",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/tasks/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"tasks",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Gestión de tareas del usuario.\n\n- `GET /api/tasks`  \n    Lista todas las tareas del usuario autenticado.\n    \n- `GET /api/tasks/:id`  \n    Devuelve una tarea específica por id.\n    \n- `POST /api/tasks`  \n    Crea una nueva tarea con título, descripción, fecha, estado, prioridad y categoría.\n    \n- `PUT /api/tasks/:id`  \n    Actualiza los datos de una tarea existente.\n    \n- `DELETE /api/tasks/:id`  \n    Elimina una tarea del usuario.\n    \n\nTodas las rutas requieren `Authorization: Bearer {{token}}`."
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "crear categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Compras\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "obtener categoria por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "borrar una categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/categories/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "actualizar categoria",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Shopping\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories/5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Gestión de categorías para organizar las tareas.\n\n- `GET /api/categories`  \n    Lista las categorías creadas por el usuario.\n    \n- `POST /api/categories`  \n    Crea una nueva categoría (por ejemplo: “Trabajo”, “Estudio”, “Personal”).\n    \n- `PUT /api/categories/:id`  \n    Actualiza el nombre de una categoría existente.\n    \n- `DELETE /api/categories/:id`\n    \n\nElimina una categoría por ID.\n\nTodas las rutas requieren `Authorization: Bearer {{token}}`."
+		},
+		{
+			"name": "Token guardado",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tasks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
