@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(cors());
 // Rutas de autenticación
 app.use('/api/auth', authRoutes);
-
 // Rutas de categorias
 app.use('/api/categories', categoryRoutes);
 // Rutas de tareas
@@ -38,8 +37,6 @@ app.get('/api/db-check', async (req, res) => {
     res.status(500).json({ status: 'error', message: 'Error al conectar con la base de datos' });
   }
 });
-
-
 
 const PORT = process.env.PORT || 3000;
 

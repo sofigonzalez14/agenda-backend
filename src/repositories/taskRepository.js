@@ -1,7 +1,7 @@
 const { pool } = require('../config/db');
 
 const TaskRepository = {
-  // Lista todas las tareas del usuario (podemos filtrar por estado/categoría después si queremos)
+  // Lista todas las tareas del usuario 
   async findAllByUser(userId) {
     const [rows] = await pool.query(
       `SELECT 
@@ -23,7 +23,7 @@ const TaskRepository = {
     return rows;
   },
 
-  // Busca una tarea puntual por id + usuario (para no ver tareas de otros)
+  // Busca una tarea puntual por id + usuario 
   async findById(id, userId) {
     const [rows] = await pool.query(
       `SELECT 

@@ -1,12 +1,10 @@
 const CategoryRepository = require('../repositories/categoryRepository');
 
 const CategoryService = {
-  // Listar todas las categorías del usuario
   async getAllForUser(userId) {
     return CategoryRepository.findAllByUser(userId);
   },
 
-  // Obtener una categoría puntual por id (del usuario)
   async getByIdForUser(id, userId) {
     const category = await CategoryRepository.findById(id, userId);
 
@@ -17,7 +15,6 @@ const CategoryService = {
     return category;
   },
 
-  // Crear nueva categoría para el usuario
   async createForUser({ name, userId }) {
     if (!name || !name.trim()) {
       throw new Error('El nombre de la categoría es obligatorio');
@@ -32,8 +29,6 @@ const CategoryService = {
 
     return newCategory;
   },
-
-  // Actualizar categoría
   async updateForUser(id, userId, { name }) {
     if (!name || !name.trim()) {
       throw new Error('El nombre de la categoría es obligatorio');
@@ -54,7 +49,6 @@ const CategoryService = {
     };
   },
 
-  // Borrar categoría
   async deleteForUser(id, userId) {
     const existing = await CategoryRepository.findById(id, userId);
     if (!existing) {

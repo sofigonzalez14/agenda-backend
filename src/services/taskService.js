@@ -5,12 +5,11 @@ const VALID_STATUS = ['pendiente', 'en_progreso', 'completada'];
 const VALID_PRIORITY = ['baja', 'media', 'alta'];
 
 const TaskService = {
-  // Lista todas las tareas del usuario
+
   async getAllForUser(userId) {
     return TaskRepository.findAllByUser(userId);
   },
 
-  // Busca una tarea puntual del usuario
   async getByIdForUser(id, userId) {
     const task = await TaskRepository.findById(id, userId);
 
@@ -21,9 +20,8 @@ const TaskService = {
     return task;
   },
 
-  // Crear nueva tarea
   async createForUser({ title, description, dueDate, status, priority, categoryId, userId }) {
-    // Validaciones básicas
+
     if (!title || !title.trim()) {
       throw new Error('El título de la tarea es obligatorio');
     }
@@ -42,7 +40,6 @@ const TaskService = {
     let finalCategoryId = null;
 
     if (categoryId) {
-      // Verificamos que la categoría exista y sea del usuario
       const category = await CategoryRepository.findById(categoryId, userId);
       if (!category) {
         throw new Error('La categoría seleccionada no existe o no pertenece al usuario');
@@ -53,7 +50,7 @@ const TaskService = {
     const newTask = await TaskRepository.create({
       title: title.trim(),
       description: description || null,
-      dueDate: dueDate || null,        // puede ser null si no hay fecha límite
+      dueDate: dueDate || null,       
       status: finalStatus,
       priority: finalPriority,
       categoryId: finalCategoryId,
@@ -63,14 +60,11 @@ const TaskService = {
     return newTask;
   },
 
-  // Actualizar tarea (permitimos actualización parcial)
   async updateForUser(id, userId, { title, description, dueDate, status, priority, categoryId }) {
     const existing = await TaskRepository.findById(id, userId);
     if (!existing) {
       throw new Error('Tarea no encontrada');
     }
-
-    // Tomamos lo nuevo o dejamos lo anterior
     const finalTitle = title !== undefined ? title : existing.title;
     const finalDescription = description !== undefined ? description : existing.description;
     const finalDueDate = dueDate !== undefined ? dueDate : existing.due_date;
@@ -121,7 +115,6 @@ const TaskService = {
     };
   },
 
-  // Borrar tarea
   async deleteForUser(id, userId) {
     const existing = await TaskRepository.findById(id, userId);
     if (!existing) {

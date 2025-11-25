@@ -24,8 +24,6 @@ function validateRegister(req, res, next) {
     err.statusCode = 400;
     return next(err);
   }
-
-  // Si todo está ok, seguimos al controller
   next();
 }
 

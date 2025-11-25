@@ -4,7 +4,6 @@ const { verifyToken } = require('../utils/jwt');
 function authMiddleware(req, res, next) {
   const authHeader = req.headers['authorization'] || '';
 
-  // Esperamos algo como: "Bearer asdasdasd..."
   const [scheme, token] = authHeader.split(' ');
 
   if (scheme !== 'Bearer' || !token) {
@@ -12,16 +11,11 @@ function authMiddleware(req, res, next) {
   }
 
   try {
-    // Verificamos el token y sacamos el payload (userId, email, etc.)
     const payload = verifyToken(token);
-
-    // Guardamos info del usuario en req.user para usarla en las rutas
     req.user = {
       id: payload.userId,
       email: payload.email
     };
-
-    // Si todo ok, seguimos a la siguiente función (controller)
     next();
   } catch (error) {
     console.error('Error en authMiddleware:', error.message);
@@ -29,6 +23,5 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// 👇 ESTO ES LO IMPORTANTE
 module.exports = authMiddleware;
 

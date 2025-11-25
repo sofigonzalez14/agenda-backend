@@ -1,6 +1,5 @@
 const { pool } = require('../config/db');
 
-// Todas las consultas SQL relacionadas con la tabla "users"..
 const UserRepository = {
 
   // Buscar un usuario por email
