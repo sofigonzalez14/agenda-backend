@@ -60,12 +60,10 @@ const CategoryController = {
       return res.json(updated);
     } catch (error) {
       console.error('Error en update category:', error.message);
-      // puede ser validación o "no encontrada"
+      
       return res.status(400).json({ message: error.message });
     }
   },
-
-  // DELETE /api/categories/:id
   async remove(req, res) {
     try {
       const userId = req.user.id;
@@ -73,7 +71,7 @@ const CategoryController = {
 
       await CategoryService.deleteForUser(id, userId);
 
-      return res.status(204).send(); // 204 = sin contenido
+      return res.status(204).send(); 
     } catch (error) {
       console.error('Error en delete category:', error.message);
       return res.status(400).json({ message: error.message });

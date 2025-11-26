@@ -82,9 +82,10 @@ const AuthService = {
     if (!user) {
       throw new Error('Credenciales inválidas');
     }
+    /*
     if (!user.is_verified) {
       throw new Error('La cuenta no está verificada. Por favor revisá tu correo.');
-    }
+    }*/
     const passwordMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordMatch) {
       throw new Error('Credenciales inválidas');

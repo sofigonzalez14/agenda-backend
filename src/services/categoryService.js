@@ -22,6 +22,15 @@ const CategoryService = {
 
     const cleanName = name.trim();
 
+    const existing = await CategoryRepository.findByNameForUser(
+      cleanName,
+      userId
+    );
+
+    if (existing) {
+      throw new Error('Ya tenés una categoría con ese nombre');
+    }
+
     const newCategory = await CategoryRepository.create({
       name: cleanName,
       userId
@@ -29,6 +38,7 @@ const CategoryService = {
 
     return newCategory;
   },
+
   async updateForUser(id, userId, { name }) {
     if (!name || !name.trim()) {
       throw new Error('El nombre de la categoría es obligatorio');
@@ -40,6 +50,12 @@ const CategoryService = {
     }
 
     const cleanName = name.trim();
+    const existingWithSameName =
+      await CategoryRepository.findByNameForUser(cleanName, userId);
+
+    if (existingWithSameName && existingWithSameName.id !== id) {
+      throw new Error('Ya tenés una categoría con ese nombre');
+    }
 
     await CategoryRepository.update(id, userId, { name: cleanName });
 
@@ -60,3 +76,4 @@ const CategoryService = {
 };
 
 module.exports = CategoryService;
+

@@ -13,7 +13,7 @@ const AuthController = {
       });
 
       return res.status(201).json({
-        message: 'Usuario registrado correctamente. Falta implementar envío de email real.',
+        message: 'Usuario registrado correctamente.',
         user,
         verificationToken
       });

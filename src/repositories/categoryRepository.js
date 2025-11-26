@@ -19,6 +19,14 @@ const CategoryRepository = {
     return rows[0] || null;
   },
 
+  async findByNameForUser(name, userId) {
+    const [rows] = await pool.query(
+      'SELECT id, name, user_id FROM categories WHERE name = ? AND user_id = ? LIMIT 1',
+      [name, userId]
+    );
+    return rows[0] || null;
+  },
+
   // Crea una categoría nueva
   async create({ name, userId }) {
     const [result] = await pool.query(
