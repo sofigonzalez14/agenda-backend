@@ -56,5 +56,6 @@ Uso rápido:
 
 ## Deploy en Vercel
 El backend esta desplegado en:
-https://backend-agenda-sepia.vercel.app/api/health
+https://agenda-backend-nu.vercel.app/api/health
+
 
