@@ -1,6 +1,5 @@
 const AuthService = require('../services/authService');
 
-// Acá manejamos req/res y llamamos al servicio
 const AuthController = {
   async register(req, res) {
     try {
@@ -15,7 +14,7 @@ const AuthController = {
       return res.status(201).json({
         message: 'Usuario registrado correctamente.',
         user,
-        verificationToken
+        verificationToken 
       });
     } catch (error) {
       console.error('Error en register:', error.message);
@@ -29,12 +28,29 @@ const AuthController = {
 
       const user = await AuthService.verifyAccount(token);
 
+      const frontendUrl = process.env.FRONTEND_URL;
+
+      if (frontendUrl) {
+        const redirectUrl = `${frontendUrl}/login?verified=1`;
+        return res.redirect(redirectUrl);
+      }
+
       return res.json({
         message: 'Cuenta verificada correctamente',
         user
       });
     } catch (error) {
       console.error('Error en verify:', error.message);
+
+      const frontendUrl = process.env.FRONTEND_URL;
+
+      if (frontendUrl) {
+        const redirectUrl = `${frontendUrl}/login?verified=0&error=${encodeURIComponent(
+          error.message
+        )}`;
+        return res.redirect(redirectUrl);
+      }
+
       return res.status(400).json({ message: error.message });
     }
   },
@@ -55,8 +71,8 @@ const AuthController = {
       return res.status(400).json({ message: error.message });
     }
   },
-  async me(req, res) {
 
+  async me(req, res) {
     if (!req.user) {
       return res.status(401).json({ message: 'No autenticado' });
     }
@@ -69,3 +85,4 @@ const AuthController = {
 };
 
 module.exports = AuthController;
+
