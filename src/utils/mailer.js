@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendVerificationEmail(toEmail, verificationToken) {
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-  const verifyUrl = `${backendUrl}/api/auth/verify?token=${verificationToken}`;
+  const FRONTEND_URL = process.env.FRONTEND_URL; 
+  const verifyUrl = `${FRONTEND_URL}/api/auth/verify?token=${verificationToken}`;
 
   const mailOptions = {
     from: `"Mi Agenda" <${process.env.SMTP_USER}>`,
