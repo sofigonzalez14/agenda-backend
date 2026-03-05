@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT || 587),
-  secure: false, 
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendVerificationEmail(toEmail, verificationToken) {
-  const FRONTEND_URL = process.env.FRONTEND_URL; 
-  const verifyUrl = `${FRONTEND_URL}?token=${verificationToken}`;
+
+  const verifyUrl = `http://localhost:3000/verify?token=${verificationToken}`;
 
   const mailOptions = {
     from: `"Mi Agenda" <${process.env.SMTP_USER}>`,
