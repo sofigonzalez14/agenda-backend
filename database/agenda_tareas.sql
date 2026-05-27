@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-11-2025 a las 00:04:21
+-- Tiempo de generación: 27-05-2026 a las 19:46:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -39,9 +39,11 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `user_id`, `created_at`) VALUES
-(1, 'Trabajo', 5, '2025-11-21 19:29:46'),
 (3, 'Estudio', 5, '2025-11-25 21:28:17'),
-(5, 'Shopping', 5, '2025-11-25 21:28:48');
+(5, 'Shopping', 5, '2025-11-25 21:28:48'),
+(10, 'trabajo', 6, '2026-04-28 18:39:40'),
+(11, 'trabajo', 5, '2026-04-28 18:40:04'),
+(12, 'censs', 5, '2026-04-29 18:57:52');
 
 -- --------------------------------------------------------
 
@@ -67,7 +69,10 @@ CREATE TABLE `tasks` (
 --
 
 INSERT INTO `tasks` (`id`, `title`, `description`, `due_date`, `status`, `priority`, `category_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(3, 'Comprar frutas y verduras', 'Agregar tomates y bananas', '2025-12-01', 'en_progreso', 'alta', 1, 5, '2025-11-25 21:11:02', NULL);
+(3, 'Comprar frutas y verduras', 'Agregar tomates y bananas', '2025-12-01', 'en_progreso', 'alta', 3, 5, '2025-11-25 21:11:02', NULL),
+(6, 'prueba', NULL, '2026-04-30', 'pendiente', 'alta', 3, 5, '2026-04-29 18:51:11', NULL),
+(7, 'kk', NULL, '2026-04-30', 'pendiente', 'baja', 5, 5, '2026-04-29 18:53:41', NULL),
+(8, 'assd', NULL, '2026-05-13', 'pendiente', 'alta', NULL, 12, '2026-05-16 19:39:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -91,11 +96,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `is_verified`, `verification_token`, `verification_token_expires`, `created_at`) VALUES
-(1, 'Sofi', 'sofi@example.com', '$2b$10$YI3XrCILC62aPd5RpEObT.sdr5KjjzhaJpqimGeuT4bEDIObnqFGK', 0, '1e013f59f58b397a495fc04f4c40783ba133e64f3ee17a72b2eccb463b98595e', '2025-11-21 17:11:03', '2025-11-20 20:11:03'),
-(2, 'Sofi 2', 'sofi2@example.com', '$2b$10$G3CLKtvzFY8CDBQ2NfreJeq3gNvm27xUHx86S9NVdAXyzh5iNdk7m', 0, '21bce0e14803abfa501f6cf1364346b62d41920845e9d652944aafb90d0e0213', '2025-11-21 18:22:04', '2025-11-20 21:22:04'),
-(3, 'Sofi 3', 'sofi3@example.com', '$2b$10$SKgvaySXwyLw/GV9JcEu9ehyI3miZMZ7/dIRdGvySDSJauiBkD9/.', 0, '3d398b1d7702ee3b756952cc29dd81b3a30a8e4e9c5268a5da36c6f2c65996dc', '2025-11-21 18:24:42', '2025-11-20 21:24:42'),
-(4, 'Sofia gonzalez', 'sofi4@example.com', '$2b$10$OySGKDWC5bDjzKamD1KbEe.42NQPB7qlNpJE665Yo9GRCVlvXPokG', 0, '5e9cbc59e0bc55e8a0e7688a431556565a2f086ba5831cdfe3f883510fc74589', '2025-11-22 00:25:10', '2025-11-21 03:25:10'),
-(5, 'Sofia verify', 'sofiverify@example.com', '$2b$10$tIphrFrSf7G/GtTH4MPMZOr618YmLqQafPl/gHLniquFj6vw.oP72', 1, NULL, NULL, '2025-11-21 03:35:31');
+(5, 'Sofia verify', 'sofiverify@example.com', '$2b$10$tIphrFrSf7G/GtTH4MPMZOr618YmLqQafPl/gHLniquFj6vw.oP72', 1, NULL, NULL, '2025-11-21 03:35:31'),
+(6, 'Test', 'test@mail.com', '$2b$10$qWMj/KXa81hALktVdimgX.GMxh9xcZwobphHBBHNZuEmBVOBUNfJy', 1, NULL, NULL, '2026-03-05 00:20:31'),
+(11, 'so', 'sofimacag@gmail.com', '$2b$10$zfjsSrQ.IyUOcrhF000BFOUxZWs9ReaZeysCZt.zB9PTrxceKNZoy', 0, '7d83cc4bcd890cca11ed10176a542a18c8c4dd24930861651969d5507e6bf162', '2026-04-30 20:57:56', '2026-04-29 23:57:56'),
+(12, 'maru', 'mlt36.maru@gmail.com', '$2b$10$OCc1HLz9IcvOjPxIXGblN.MNPUJJlacUCxCY3LLXkMd67VMt9t5e2', 1, NULL, NULL, '2026-04-30 00:03:43');
 
 --
 -- Índices para tablas volcadas
@@ -106,7 +110,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password_hash`, `is_verified`, `ver
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `name_user_unique` (`name`,`user_id`),
   ADD KEY `fk_categories_users` (`user_id`);
 
 --
@@ -132,19 +136,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restricciones para tablas volcadas
